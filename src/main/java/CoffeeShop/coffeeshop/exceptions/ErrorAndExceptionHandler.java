@@ -7,9 +7,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorAndExceptionHandler {
+    
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
     public String handleResourceNotFound(ResourceNotFoundException e){
         return e.getMessage();
-    } 
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidPriceException.class)
+    public String handleInvalidPrice(InvalidPriceException e){
+        return e.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DuplicateNameException.class)
+    public String handleDuplicateNames(DuplicateNameException e){
+        return e.getMessage();
+    }
+
 }
