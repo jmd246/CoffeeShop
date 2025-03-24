@@ -1,13 +1,15 @@
 package CoffeeShop.coffeeshop.services;
 
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import CoffeeShop.coffeeshop.exceptions.DuplicateNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidPriceException;
+import CoffeeShop.coffeeshop.exceptions.ResourceNotFoundException;
 import CoffeeShop.coffeeshop.models.Coffee;
 import CoffeeShop.coffeeshop.repositories.CoffeeRepo;
 
@@ -19,6 +21,20 @@ public class CoffeeService {
     }
     public List<Coffee> fetchAllCoffee(){
         return repo.findAll();
+    }
+    public  List<Coffee> fetchAllCoffeeByTemp(boolean isCold){
+        List<Coffee> coffees =  new ArrayList<>();
+        repo.findAll().forEach(coffee->{
+            if(coffee.isCold()==isCold){
+                coffees.add(coffee);
+            } 
+        });
+        return coffees;
+    }
+    public Coffee getById(Long id){
+        Optional<Coffee> coffee =  repo.findById(id);
+        if(coffee.isPresent())return coffee.get();
+        throw new ResourceNotFoundException("nothing to show here");
     }
     public Coffee addCoffee(Coffee coffee){
         if(coffee.getName().length()< 4 || coffee.getName().length() > 25){
@@ -33,4 +49,5 @@ public class CoffeeService {
         }
         return repo.save(coffee);
     }
+  
 }

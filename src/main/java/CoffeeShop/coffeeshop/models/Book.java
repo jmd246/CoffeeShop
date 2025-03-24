@@ -1,32 +1,48 @@
 package CoffeeShop.coffeeshop.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "books" )
-public class Book {
+public class Book implements Purchaseable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private double price;
+    private boolean available;
     private String title,author;
     private String isbn;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
+   
+    public Book(){}
+    public Book(String title, String author, String isbn,double price ,boolean available) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.price = price;
+        this.available = available;
+    }
     public String getIsbn() {
         return isbn;
     }
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
-    private boolean available;
-    public Book(){}
-    public Book(String title, String author, String isbn, boolean available) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.available = available;
+    public double getPrice() {
+        return price;
+    }
+    public void setPrice(double price) {
+        this.price = price;
     }
     //id title author isbn available
     public Long getId() {
