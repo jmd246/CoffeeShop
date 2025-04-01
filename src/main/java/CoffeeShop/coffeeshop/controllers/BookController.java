@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import CoffeeShop.coffeeshop.dto.BookDTO;
-import CoffeeShop.coffeeshop.exceptions.InvalidNameException;
 import CoffeeShop.coffeeshop.exceptions.ResourceNotFoundException;
 import CoffeeShop.coffeeshop.models.Book;
 import CoffeeShop.coffeeshop.services.BookService;

@@ -4,6 +4,8 @@ package CoffeeShop.coffeeshop.controllers;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +35,7 @@ public class UserController {
         throw new InvalidNameException("invalid size");
         else if(user.getEmail().length()<6||user.getEmail().length()>100)
         throw new InvalidNameException("invalid size");
-        return  ResponseEntity.status(201).body(service.save(user));
+        return  ResponseEntity.status(201).body(service.register(user));
     }
     @PostMapping("/login")
     public  ResponseEntity<User> login(@RequestBody  UserDTO user) {
@@ -45,4 +47,10 @@ public class UserController {
             }  
         throw new ResourceNotFoundException("user not found");
     }
+    @PatchMapping("update/{id}")
+    ResponseEntity<User> updateUser(@RequestBody UserDTO updateInfo, @PathVariable long id){
+      
+        return ResponseEntity.ok(service.update(id,updateInfo));
+    }
+    
 }

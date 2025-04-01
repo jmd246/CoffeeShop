@@ -63,7 +63,7 @@ public class CoffeeService {
         Optional<Coffee> coffee = repo.findById(id);
         if(coffee.isPresent()){
             repo.delete(coffee.get());
-            return "deleted coffee"+ coffee.get().toString() +"succesfully";
+            return "deleted coffee"+ coffee.get().toString() +" succesfully";
         }
         throw new ResourceNotFoundException("failed to find coffee");
     }
