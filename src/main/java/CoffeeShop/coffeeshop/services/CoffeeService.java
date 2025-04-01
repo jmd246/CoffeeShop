@@ -49,5 +49,23 @@ public class CoffeeService {
         }
         return repo.save(coffee);
     }
+    public Coffee updateCoffee(Long id, Coffee coffeeUpdate){
+       Optional<Coffee> coffee = repo.findById(id);
+       if(coffee.isPresent()){
+          coffee.get().setName(coffeeUpdate.getName());
+          coffee.get().setPrice(coffeeUpdate.getPrice());
+          coffee.get().setCold(coffeeUpdate.isCold());
+          return repo.save(coffee.get());
+       }
+       return null;
+    }
+    public String delete(long id){
+        Optional<Coffee> coffee = repo.findById(id);
+        if(coffee.isPresent()){
+            repo.delete(coffee.get());
+            return "deleted coffee"+ coffee.get().toString() +"succesfully";
+        }
+        throw new ResourceNotFoundException("failed to find coffee");
+    }
   
 }

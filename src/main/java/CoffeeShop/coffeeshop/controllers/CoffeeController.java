@@ -3,9 +3,12 @@ package CoffeeShop.coffeeshop.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +26,11 @@ public class CoffeeController {
     public CoffeeController(CoffeeService service){
         this.service = service;
     }
+    //fetching data mappings
     @GetMapping("id/{id}")
     ResponseEntity<Coffee> fetchCoffee(@PathVariable long id){
         return  ResponseEntity.ok(service.getById(id));
     }
-
     @GetMapping("/all")
     ResponseEntity<List<Coffee>> fetchAllCoffee(){
         return ResponseEntity.ok(service.fetchAllCoffee());
@@ -47,6 +50,7 @@ public class CoffeeController {
         }
         return ResponseEntity.ok(service.fetchAllCoffeeByTemp(isCold));
     }
+    // add coffees
     @PostMapping("/add")
     ResponseEntity<Coffee> addCoffee(@RequestBody CoffeeDTO coffee){
         Coffee newCoffee =  new Coffee(
@@ -55,5 +59,20 @@ public class CoffeeController {
             coffee.isCold()
         );
         return ResponseEntity.status(201).body(service.addCoffee(newCoffee));
+    }
+    //update
+    @PatchMapping("/update/{id}")
+    ResponseEntity<Coffee> updateCoffee(@RequestBody CoffeeDTO coffee, @PathVariable long id){
+        Coffee coffeeUpdate = new Coffee(
+            coffee.getName(),
+            coffee.getPrice(),
+            coffee.isCold()
+        );
+        return ResponseEntity.ok(service.updateCoffee(id,coffeeUpdate));
+    }
+    //delete
+    @DeleteMapping("delete/{id}")
+    ResponseEntity<String> deleteCoffee(@PathVariable long id){
+        return ResponseEntity.ok(service.delete(id));
     }
 }
