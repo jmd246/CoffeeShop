@@ -1,10 +1,13 @@
 package CoffeeShop.coffeeshop.models;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,13 +16,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "user_order")
 public class Order {
+
+    private enum OrderStatus{
+        PENDING,DELIVERED,COMPLETED 
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long orderId;
-
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
@@ -27,16 +36,43 @@ public class Order {
     private double total,subTotal;
   
     @OneToMany
-    private List<Book> bookCart;
-    @OneToMany
-    private List<Coffee> coffeeCart;
+    private List<Product> cart;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+    public Order(User user, List<Product> products, LocalDate orderDate,LocalDate deliveryDate, OrderStatus status){
+        this.cart = products;
+        this.user = user;
+        this.orderDate = orderDate;
+        this.deliveryDate = deliveryDate;
+        this.status = status;
+    }
+    public Order(){
+        
+    }
+    public OrderStatus getStatus() {
+        return status;
+    }
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+    private LocalDate orderDate, deliveryDate;
+
 
     
-    public Order(long userId){
-        total=subTotal=0;
-        coffeeCart = new ArrayList<>();
-        bookCart = new ArrayList<>();
+    public LocalDate getDeliveryDate() {
+        return deliveryDate;
     }
+    public void setDeliveryDate(LocalDate deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
+    }
+   
     public long getOrderId() {
         return orderId;
     }
@@ -57,20 +93,12 @@ public class Order {
         this.total = total;
     }
 
-    public void addToCoffeeCart(Coffee product){
-        coffeeCart.add(product);
-    }
-    public void addToBookCart(Book product){
-        bookCart.add(product);
-    }
+   
     public double calculateTaxes(){
         return  subTotal    *   0.07;
     }
-    public double calculateCoffeeSubTotal(){
-        return coffeeCart.stream().mapToDouble(Purchaseable::getPrice).sum();
-    }
-    public double calculateBookSubTotal(){
-        return bookCart.stream().mapToDouble(Purchaseable::getPrice).sum();
+    public double calculateSubTotal(){
+        return cart.stream().mapToDouble(Purchaseable::getPrice).sum();
     }
 
 }

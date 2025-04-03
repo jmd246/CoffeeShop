@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import CoffeeShop.coffeeshop.models.Book;
 @Repository
 public interface BookRepo extends JpaRepository<Book,Long>{
-   public Optional<Book> findByTitle(String title);
+   public Optional<Book> findByName(String name);
 }

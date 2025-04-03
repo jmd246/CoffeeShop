@@ -42,9 +42,9 @@ public class CoffeeService {
         }
         if(coffee.getPrice() <= 0){
             throw new InvalidPriceException("invalid price " + coffee.getPrice());
-
         }
-        if(repo.findCoffeeByName(coffee.getName()).isPresent()){
+        Optional<Coffee> existingCoffee = repo.findByName(coffee.getName());
+        if(existingCoffee.isPresent()){
            throw new DuplicateNameException("Coffee present with same name");
         }
         return repo.save(coffee);

@@ -56,7 +56,8 @@ public class CoffeeController {
         Coffee newCoffee =  new Coffee(
             coffee.getName(),
             coffee.getPrice(),
-            coffee.isCold()
+            coffee.isCold(),
+            coffee.isAvailable()
         );
         return ResponseEntity.status(201).body(service.addCoffee(newCoffee));
     }
@@ -66,6 +67,7 @@ public class CoffeeController {
         Coffee coffeeUpdate = new Coffee(
             coffee.getName(),
             coffee.getPrice(),
+            coffee.isAvailable(),
             coffee.isCold()
         );
         return ResponseEntity.ok(service.updateCoffee(id,coffeeUpdate));

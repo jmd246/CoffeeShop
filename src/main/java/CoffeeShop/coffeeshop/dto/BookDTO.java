@@ -3,16 +3,25 @@ package CoffeeShop.coffeeshop.dto;
 public class BookDTO{
   private String title,author,isbn;
   private boolean available;
+  private double price;
 
 
 
 
-public BookDTO(String title, String author, String isbn,boolean available) {
+
+public BookDTO(String title, String author, String isbn,boolean available, double price) {
     this.title = title;
-    this.author = author;
+    this.author = author;                          
     this.isbn = isbn;
     this.available = available;
+    this.price = price;
 }
+public double getPrice() {
+    return price;
+}
+  public void setPrice(double price) {
+    this.price = price;
+  }
 public boolean isAvailable() {
     return available;
 }

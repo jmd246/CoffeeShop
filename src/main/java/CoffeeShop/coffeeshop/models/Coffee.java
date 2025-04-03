@@ -11,12 +11,10 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "coffee")
-public class Coffee implements Purchaseable {
+public class Coffee extends Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
-    private double price;
     private boolean isCold;
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -30,10 +28,9 @@ public class Coffee implements Purchaseable {
     }
     public Coffee() {
     }
-    public Coffee(String name, double price,boolean isCold) {
+    public Coffee(String name, double price,boolean isAvailable,boolean isCold) {
+        super(name,price, isAvailable);
         this.isCold = isCold;
-        this.name = name;
-        this.price = price;
     }
     public long getId() {
         return id;
@@ -41,20 +38,9 @@ public class Coffee implements Purchaseable {
     public void setId(long id) {
         this.id = id;
     }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public double getPrice() {
-        return price;
-    }
-    public void setPrice(double price) {
-        this.price = price;
-    }
+
     @Override public String toString(){  
-        return  "Coffee: " +name;
+        return  "Coffee: " + this.getName();
     }
     
 }

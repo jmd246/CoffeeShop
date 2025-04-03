@@ -19,7 +19,11 @@ public class ErrorAndExceptionHandler {
     public String handleInvalidPrice(InvalidPriceException e){
         return e.getMessage();
     }
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidNameException.class)
+    public String handleInvalidName(InvalidNameException e){
+        return e.getMessage();
+    }
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateNameException.class)
     public String handleDuplicateNames(DuplicateNameException e){

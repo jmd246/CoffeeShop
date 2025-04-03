@@ -1,19 +1,27 @@
 package CoffeeShop.coffeeshop.dto;
 
 public class CoffeeDTO {
-   private boolean cold;
+   private boolean isCold,isAvailable;
+   
     private String name;
     private double price;
-    public CoffeeDTO(boolean cold, String name, double price) {
-        this.cold = cold;
+    public CoffeeDTO(boolean isCold, boolean  isAvailable,String name, double price) {
+        this.isCold = isCold;
         this.name = name;
         this.price = price;
+        this.isAvailable = isAvailable;
+    }
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
     }
     public boolean isCold() {
-        return cold;
+        return isCold;
     }
     public void setCold(boolean cold) {
-        this.cold = cold;
+        this.isCold = cold;
     }
     public String getName() {
         return name;
