@@ -12,9 +12,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "coffee")
 public class Coffee extends Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+   
     private boolean isCold;
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -32,12 +30,7 @@ public class Coffee extends Product {
         super(name,price, isAvailable);
         this.isCold = isCold;
     }
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+  
 
     @Override public String toString(){  
         return  "Coffee: " + this.getName();

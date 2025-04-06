@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public abstract class Product implements  Purchaseable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long productId;
     
     private double price;
     private String name;

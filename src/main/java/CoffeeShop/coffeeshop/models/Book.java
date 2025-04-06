@@ -1,7 +1,6 @@
 package CoffeeShop.coffeeshop.models;
 
 
-import CoffeeShop.coffeeshop.exceptions.InvalidNameException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,9 +10,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "books" )
 public class Book  extends  Product{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  
     private String author;
     private String isbn;
     
@@ -32,13 +29,7 @@ public class Book  extends  Product{
     }
    
     //id title author isbn available
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+   
     public String getAuthor() {
         return author;
     }

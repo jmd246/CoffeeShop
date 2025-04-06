@@ -11,13 +11,17 @@ import CoffeeShop.coffeeshop.exceptions.InvalidNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidPriceException;
 import CoffeeShop.coffeeshop.exceptions.ResourceNotFoundException;
 import CoffeeShop.coffeeshop.models.Coffee;
+import CoffeeShop.coffeeshop.models.Inventory;
 import CoffeeShop.coffeeshop.repositories.CoffeeRepo;
+import CoffeeShop.coffeeshop.repositories.InventoryRepo;
 
 @Service
 public class CoffeeService {
     private final CoffeeRepo repo;
-    public CoffeeService(CoffeeRepo repo){
+    private final InventoryRepo inventoryRepo;
+    public CoffeeService(CoffeeRepo repo,InventoryRepo inventoryRepo){
         this.repo = repo;
+        this.inventoryRepo = inventoryRepo;
     }
     public List<Coffee> fetchAllCoffee(){
         return repo.findAll();
@@ -47,7 +51,9 @@ public class CoffeeService {
         if(existingCoffee.isPresent()){
            throw new DuplicateNameException("Coffee present with same name");
         }
-        return repo.save(coffee);
+        Coffee persistedCoffee = repo.save(coffee);
+        inventoryRepo.save(new Inventory(persistedCoffee,10));
+        return persistedCoffee;
     }
     public Coffee updateCoffee(Long id, Coffee coffeeUpdate){
        Optional<Coffee> coffee = repo.findById(id);
@@ -62,6 +68,7 @@ public class CoffeeService {
     public String delete(long id){
         Optional<Coffee> coffee = repo.findById(id);
         if(coffee.isPresent()){
+            inventoryRepo.deleteByProductName(coffee.get());
             repo.delete(coffee.get());
             return "deleted coffee"+ coffee.get().toString() +" succesfully";
         }

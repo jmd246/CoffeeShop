@@ -10,13 +10,17 @@ import CoffeeShop.coffeeshop.exceptions.InvalidNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidPriceException;
 import CoffeeShop.coffeeshop.exceptions.ResourceNotFoundException;
 import CoffeeShop.coffeeshop.models.Book;
+import CoffeeShop.coffeeshop.models.Inventory;
 import CoffeeShop.coffeeshop.repositories.BookRepo;
+import CoffeeShop.coffeeshop.repositories.InventoryRepo;
 
 @Service
 public class BookService {
     private final BookRepo bookRepo;
-    public BookService(BookRepo bookRepo){
+    private final InventoryRepo inventoryRepo;
+    public BookService(BookRepo bookRepo,InventoryRepo inventoryRepo){
         this.bookRepo = bookRepo;
+        this.inventoryRepo = inventoryRepo;
     }
 
     public Book addBook(Book book){
@@ -35,7 +39,9 @@ public class BookService {
         if(bookRepo.findByName(book.getName()).isPresent()){
            throw new DuplicateNameException("Coffee present with same name");
         }
-        return bookRepo.save(book);
+        Book persistedBook = bookRepo.save(book);
+        inventoryRepo.save(new Inventory(persistedBook,10));
+        return persistedBook;
     }
     public List<Book> fetchBooks(){
         return bookRepo.findAll();
@@ -48,6 +54,7 @@ public class BookService {
     }
     public String deleteBook(long id){
         if(bookRepo.findById(id).isEmpty()) throw new ResourceNotFoundException("Cant find book to delete");
+        inventoryRepo.deleteByProductName(bookRepo.findById(id).get());
         bookRepo.deleteById(id);
         return "Deleted book with id " + id + " succesffully"; 
     }
