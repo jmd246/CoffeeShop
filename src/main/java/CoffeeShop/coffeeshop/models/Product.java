@@ -8,11 +8,12 @@ import jakarta.persistence.*;
 public abstract class Product implements  Purchaseable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long productId;
+    private long id;
     
     private double price;
     private String name;
     private boolean isAvailable;
+
 
     
     
@@ -40,5 +41,8 @@ public abstract class Product implements  Purchaseable{
     }
     public void setAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable;
+    }
+    public long getId(){
+        return id;
     }    
 }

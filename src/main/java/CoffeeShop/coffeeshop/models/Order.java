@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,21 +31,32 @@ public class Order {
     private User user;
 
     private double total,subTotal;
+    private int quantity;
   
-    @OneToMany
-    private List<Product> cart;
+    @OneToOne
+    @JoinColumn(name = "productId",unique = true)
+    private Product product;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    public Order(User user, List<Product> products, LocalDate orderDate,LocalDate deliveryDate, OrderStatus status){
-        this.cart = products;
+    public Order(User user, Product product, int quantity){
+        this.product = product;
         this.user = user;
-        this.orderDate = orderDate;
-        this.deliveryDate = deliveryDate;
-        this.status = status;
+        this.orderDate = LocalDate.now();
+        this.status = OrderStatus.PENDING;
+        this.quantity = quantity;
     }
     public Order(){
         
+    }
+    public int getQuantity(){
+        return quantity;
+    }
+    public void setQuantity(int quantity){
+        if(quantity <= 0 ) quantity = 1;
+        else{
+           quantity = this.quantity;
+        }
     }
     public OrderStatus getStatus() {
         return status;
@@ -88,13 +100,10 @@ public class Order {
     public void setTotal(double total) {
         this.total = total;
     }
+    public Product getProduct(){
+        return product;
+    }
 
-   
-    public double calculateTaxes(){
-        return  subTotal    *   0.07;
-    }
-    public double calculateSubTotal(){
-        return cart.stream().mapToDouble(Purchaseable::getPrice).sum();
-    }
+  
 
 }

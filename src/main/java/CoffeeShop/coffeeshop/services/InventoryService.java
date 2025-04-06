@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import CoffeeShop.coffeeshop.models.Inventory;
-import CoffeeShop.coffeeshop.models.Product;
 import CoffeeShop.coffeeshop.repositories.InventoryRepo;
 
 @Service
