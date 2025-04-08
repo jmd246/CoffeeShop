@@ -24,6 +24,9 @@ public class BookService {
     }
 
     public Book addBook(Book book){
+        if(book.getAuthor()==null || book.getIsbn() == null || book.getName() == null){
+            throw new InvalidNameException("invalid book entry");
+        }
         if(book.getIsbn().length()< 8 ||  book.getIsbn().length()>32){
             throw new InvalidNameException("invalid isbn");
         }

@@ -24,6 +24,11 @@ public class ErrorAndExceptionHandler {
     public String handleInvalidName(InvalidNameException e){
         return e.getMessage();
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidEntityException.class)
+    public String handleInvalidName(InvalidEntityException e){
+        return e.getMessage();
+    }
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateNameException.class)
     public String handleDuplicateNames(DuplicateNameException e){

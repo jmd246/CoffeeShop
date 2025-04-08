@@ -50,4 +50,9 @@ public class Inventory {
     public long getInventoryId(){
         return inventoryId;
     }
+    public void subtractBy(int count){
+        if(count < quantity){
+            quantity -= count;
+        }
+    }
 }

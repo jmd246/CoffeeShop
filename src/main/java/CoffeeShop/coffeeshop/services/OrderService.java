@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import CoffeeShop.coffeeshop.exceptions.ResourceNotFoundException;
+import CoffeeShop.coffeeshop.models.Inventory;
 import CoffeeShop.coffeeshop.models.Order;
+import CoffeeShop.coffeeshop.models.OrderItem;
 import CoffeeShop.coffeeshop.models.Product;
 import CoffeeShop.coffeeshop.models.User;
 import CoffeeShop.coffeeshop.repositories.InventoryRepo;
@@ -44,9 +46,37 @@ public class OrderService {
     
     public Order createOrder(long userId,long productId, int quantity){
         Optional<User> user = userRepo.findById(userId);
-        Product product = inventoryRepo.findByProductId(productId).getProduct();
-        if(user.isPresent() && inventoryRepo.findByProductName(product.getName()).getQuantity() > quantity){
-            Order order = new Order(user.get(),product,quantity);
+        Inventory record = inventoryRepo.findByProductId(productId); 
+        Product product = record.getProduct();
+        if(user.isPresent() && inventoryRepo.findByProductName(product.getName()).getQuantity() >= quantity){
+            OrderItem item = new OrderItem(quantity,product);
+            Order order = null;
+            for(Order userOrder : orderRepo.findAllOrdersByUserId(userId)){
+                if(userOrder.getStatus() == Order.OrderStatus.PENDING){
+                    order = userOrder;
+                }
+            }
+            //order = orderRepo.findOrderByUserId(userId);
+            if(order == null){
+               order = new Order(user.get(),item);
+               item.setOrder(order);
+            }
+            else{
+                boolean orderHasItem = false;
+                for(OrderItem inCart : order.getOrderItems()){
+                    if(inCart.getProduct().equals(product)){
+                        orderHasItem = true;
+                        inCart.setQuantity(quantity + inCart.getQuantity());
+                    }
+                }
+                if(!orderHasItem){
+                   order.getOrderItems().add(item);
+                   item.setOrder(order);
+                }
+            }
+            //adjust inventory
+            record.setQuantity(record.getQuantity() - quantity);
+            inventoryRepo.save(record);
             return orderRepo.save(order);
         }
         throw new ResourceNotFoundException("cant find user or product");

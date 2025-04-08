@@ -7,5 +7,5 @@ import CoffeeShop.coffeeshop.models.User;
 
 @Repository
 public interface UserRepo extends JpaRepository<User,Long>{
-    public User findByEmailAndPassword(String email,String  passsword);
+    public User findByEmail(String email);
 }

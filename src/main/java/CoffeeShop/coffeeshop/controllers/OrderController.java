@@ -21,6 +21,6 @@ public class OrderController {
     }
     @PostMapping("/{productId}")
     public ResponseEntity<Order> postOrder(@PathVariable long productId, @RequestHeader long userId , @RequestBody OrderDTO orderInfo){
-        return ResponseEntity.status(201).body(service.createOrder(userId, productId, 0));
+        return ResponseEntity.status(201).body(service.createOrder(userId, productId, orderInfo.getQuantity()));
     }
 }
