@@ -22,11 +22,11 @@ public class InventoryController {
         this.service = service;
     }
     @GetMapping("")
-    ResponseEntity<List<Inventory>> fetchInventory(){
+    public ResponseEntity<List<Inventory>> fetchInventory(){
        return ResponseEntity.ok(service.getInventory());
     }
     @PatchMapping("/{id}")
-    ResponseEntity<Boolean> updateQuantity(@PathVariable long id, @RequestBody InventoryDTO update){
+    public ResponseEntity<Boolean> updateQuantity(@PathVariable long id, @RequestBody InventoryDTO update){
         boolean updateSuccessfully = service.setQuantity(id, update.getQuantity());
         return ResponseEntity.ok(updateSuccessfully);
     } 

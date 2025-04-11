@@ -3,7 +3,6 @@ package CoffeeShop.coffeeshop.controllers;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +26,11 @@ public class BookController {
         this.service = service;
     }
     @GetMapping("/all")
-    ResponseEntity<List<Book>> fetchBooks(){
+    public ResponseEntity<List<Book>> fetchBooks(){
         return ResponseEntity.ok(service.fetchBooks());
     }
     @GetMapping("/id/{id}")
-    ResponseEntity<Book> fetchBookById(@PathVariable long id){
+    public ResponseEntity<Book> fetchBookById(@PathVariable long id){
         Optional<Book> book = service.findById(id);
         if(book.isPresent()){
            ResponseEntity.ok(book.get());
@@ -39,7 +38,7 @@ public class BookController {
         throw new ResourceNotFoundException("");
     }
     @GetMapping("/title/{title}")
-    ResponseEntity<Book> fetchBookByTitle(@PathVariable String title){
+    public ResponseEntity<Book> fetchBookByTitle(@PathVariable String title){
         Optional<Book> book = service.findByTitle(title);
         if(book.isEmpty()){
            throw new ResourceNotFoundException("Cant find book with title "+ title);
@@ -47,11 +46,11 @@ public class BookController {
         return ResponseEntity.ok(book.get());
     }
     @PostMapping("/add")
-    ResponseEntity<Book> addBook(@RequestBody Book book){
+    public ResponseEntity<Book> addBook(@RequestBody Book book){
         return ResponseEntity.status(201).body(service.addBook(book));
     }
     @PatchMapping("/update/{id}")
-    ResponseEntity<Book> updateBook(@PathVariable long  id,@RequestBody BookDTO updatedBook){
+    public ResponseEntity<Book> updateBook(@PathVariable long  id,@RequestBody BookDTO updatedBook){
        return service.findById(id).map(book->{
             book.setAvailable(updatedBook.isAvailable());
             if(updatedBook.getAuthor().length()>4){
@@ -67,7 +66,7 @@ public class BookController {
         }).orElseThrow(()->new ResourceNotFoundException("Cant find book with id " + id ));
     }
     @DeleteMapping("/delete/{id}")
-    ResponseEntity<String> deleteBook(@PathVariable long id){
+    public ResponseEntity<String> deleteBook(@PathVariable long id){
         return ResponseEntity.ok(service.deleteBook(id));
     }
 }

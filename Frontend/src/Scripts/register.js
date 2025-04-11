@@ -14,13 +14,14 @@ document.getElementById("register-form").addEventListener("submit", async functi
     });
 
     const messageElement = document.getElementById("message");
-    alert("registration successful");
 
     if (response.ok) {
+        alert("registration successful");
+
         messageElement.textContent = "Registration successful!";
         messageElement.style.color = "green";
         // Optionally redirect:
-        // window.location.href = "login.html";
+        window.location.href = "login.html";
     }
      else {
         const errorText = await response.text();

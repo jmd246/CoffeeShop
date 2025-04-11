@@ -3,6 +3,7 @@ package CoffeeShop.coffeeshop.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +19,7 @@ import CoffeeShop.coffeeshop.models.Coffee;
 import CoffeeShop.coffeeshop.services.CoffeeService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5500", exposedHeaders = "userId")
 @RequestMapping("coffee")
 public class CoffeeController {
 
@@ -27,15 +29,15 @@ public class CoffeeController {
     }
     //fetching data mappings
     @GetMapping("id/{id}")
-    ResponseEntity<Coffee> fetchCoffee(@PathVariable long id){
+    public ResponseEntity<Coffee> fetchCoffee(@PathVariable long id){
         return  ResponseEntity.ok(service.getById(id));
     }
     @GetMapping("/all")
-    ResponseEntity<List<Coffee>> fetchAllCoffee(){
+    public ResponseEntity<List<Coffee>> fetchAllCoffee(){
         return ResponseEntity.ok(service.fetchAllCoffee());
     }
     @GetMapping("/{temp}/all")
-    ResponseEntity<List<Coffee>> getCoffeesByTemp(@PathVariable String temp ){
+    public ResponseEntity<List<Coffee>> getCoffeesByTemp(@PathVariable String temp ){
         temp =  temp.toLowerCase();
         boolean isCold = false;
         if(temp.equals("cold")||temp.equals("ice")){
@@ -51,18 +53,18 @@ public class CoffeeController {
     }
     // add coffees
     @PostMapping("/add")
-    ResponseEntity<Coffee> addCoffee(@RequestBody CoffeeDTO coffee){
+    public ResponseEntity<Coffee> addCoffee(@RequestBody CoffeeDTO coffee){
         Coffee newCoffee =  new Coffee(
             coffee.getName(),
             coffee.getPrice(),
-            coffee.isCold(),
-            coffee.isAvailable()
+            coffee.isAvailable(),
+            coffee.isCold()
         );
         return ResponseEntity.status(201).body(service.addCoffee(newCoffee));
     }
     //update
     @PatchMapping("/update/{id}")
-    ResponseEntity<Coffee> updateCoffee(@RequestBody CoffeeDTO coffee, @PathVariable long id){
+    public ResponseEntity<Coffee> updateCoffee(@RequestBody CoffeeDTO coffee, @PathVariable long id){
         Coffee coffeeUpdate = new Coffee(
             coffee.getName(),
             coffee.getPrice(),
@@ -73,7 +75,7 @@ public class CoffeeController {
     }
     //delete
     @DeleteMapping("delete/{id}")
-    ResponseEntity<String> deleteCoffee(@PathVariable long id){
+    public ResponseEntity<String> deleteCoffee(@PathVariable long id){
         return ResponseEntity.ok(service.delete(id));
     }
 }
