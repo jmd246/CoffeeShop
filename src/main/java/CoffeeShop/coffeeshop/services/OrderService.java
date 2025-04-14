@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import CoffeeShop.coffeeshop.dto.OrderUpdateRequest;
 import CoffeeShop.coffeeshop.exceptions.ResourceNotFoundException;
 import CoffeeShop.coffeeshop.models.Inventory;
 import CoffeeShop.coffeeshop.models.Order;
@@ -82,4 +83,33 @@ public class OrderService {
         throw new ResourceNotFoundException("cant find user or product");
     }
 
+    public Order updateOrder(long userId, OrderUpdateRequest updateRequest) {
+        Inventory record = inventoryRepo.findByProductId(updateRequest.getProductId());
+        Optional<User> user = userRepo.findById(userId);
+        Product product = record.getProduct();
+        int quantityChange = updateRequest.getQuantityChange();
+        System.out.println("Inventory before update: " + record.getQuantity());
+        System.out.println("Quantity change: " + quantityChange);
+        System.out.println("New quantity: " + updateRequest.getNewQuantity());
+        System.out.println("Product ID: " + updateRequest.getProductId());
+    
+        if (user.isPresent() && (record.getQuantity() - quantityChange >= 0)) {
+            Order order = orderRepo.findById(updateRequest.getOrderId())
+                                   .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+    
+            for (OrderItem item : order.getOrderItems()) {
+                if (item.getProduct().equals(product)) {
+                    item.setQuantity(updateRequest.getNewQuantity());
+                    record.setQuantity(record.getQuantity() - quantityChange);
+                }
+            }
+    
+            inventoryRepo.save(record);
+            System.out.println("Inventory updated to: " + record.getQuantity());
+            return orderRepo.save(order);
+        }
+    
+        throw new ResourceNotFoundException("Can't find user or product, or inventory would go negative");
+    }
+    
 }

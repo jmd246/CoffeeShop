@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import CoffeeShop.coffeeshop.dto.CoffeeDTO;
 import CoffeeShop.coffeeshop.exceptions.ResourceNotFoundException;
+import CoffeeShop.coffeeshop.models.Book;
 import CoffeeShop.coffeeshop.models.Coffee;
 import CoffeeShop.coffeeshop.services.CoffeeService;
 
@@ -61,6 +62,10 @@ public class CoffeeController {
             coffee.isCold()
         );
         return ResponseEntity.status(201).body(service.addCoffee(newCoffee));
+    }
+    @PostMapping("/addlist")
+    public ResponseEntity<List<Coffee>> addCoffees(@RequestBody List<Coffee> coffees){
+        return ResponseEntity.status(201).body(service.addCoffees(coffees));
     }
     //update
     @PatchMapping("/update/{id}")

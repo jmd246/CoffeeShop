@@ -10,6 +10,7 @@ import CoffeeShop.coffeeshop.exceptions.DuplicateNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidPriceException;
 import CoffeeShop.coffeeshop.exceptions.ResourceNotFoundException;
+import CoffeeShop.coffeeshop.models.Book;
 import CoffeeShop.coffeeshop.models.Coffee;
 import CoffeeShop.coffeeshop.models.Inventory;
 import CoffeeShop.coffeeshop.repositories.CoffeeRepo;
@@ -54,6 +55,13 @@ public class CoffeeService {
         Coffee persistedCoffee = repo.save(coffee);
         inventoryRepo.save(new Inventory(persistedCoffee,10));
         return persistedCoffee;
+    }
+    public List<Coffee> addCoffees(List<Coffee> coffees){
+        List<Coffee> persistedCoffees = new ArrayList<>();
+        for(Coffee coffee : coffees){
+            persistedCoffees.add(addCoffee(coffee));
+        }
+        return persistedCoffees;
     }
     public Coffee updateCoffee(Long id, Coffee coffeeUpdate){
        Optional<Coffee> coffee = repo.findById(id);

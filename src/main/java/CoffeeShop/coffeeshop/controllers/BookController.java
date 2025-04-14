@@ -49,6 +49,10 @@ public class BookController {
     public ResponseEntity<Book> addBook(@RequestBody Book book){
         return ResponseEntity.status(201).body(service.addBook(book));
     }
+    @PostMapping("/addlist")
+    public ResponseEntity<List<Book>> addBooks(@RequestBody List<Book> books){
+        return ResponseEntity.status(201).body(service.addBooks(books));
+    }
     @PatchMapping("/update/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable long  id,@RequestBody BookDTO updatedBook){
        return service.findById(id).map(book->{

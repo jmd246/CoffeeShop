@@ -24,7 +24,7 @@ import CoffeeShop.coffeeshop.models.User;
 import CoffeeShop.coffeeshop.services.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5500", exposedHeaders = "userId")
+@CrossOrigin(origins = "http://localhost:5500", exposedHeaders = {"userId", "username"})
 @RequestMapping("user")
 public class UserController {
     private final UserService service;
@@ -51,7 +51,8 @@ public class UserController {
         User loggedUser = service.authenticateUser(user);
         HttpHeaders headers = new HttpHeaders();
         headers.add("userId", String.valueOf(loggedUser.getId()));
-        headers.add("Access-Control-Expose-Headers", "userId");
+        headers.add("username", loggedUser.getName());
+        headers.add("Access-Control-Expose-Headers", "userId, username");
         return ResponseEntity.ok().headers(headers).body(loggedUser);
     }
     @GetMapping("/orders")

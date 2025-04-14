@@ -1,5 +1,6 @@
 package CoffeeShop.coffeeshop.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,13 @@ public class BookService {
         Book persistedBook = bookRepo.save(book);
         inventoryRepo.save(new Inventory(persistedBook,10));
         return persistedBook;
+    }
+    public List<Book> addBooks(List<Book> books){
+        List<Book> persistedBooks = new ArrayList<>();
+        for(Book book : books){
+            persistedBooks.add(addBook(book));
+        }
+        return persistedBooks;
     }
     public List<Book> fetchBooks(){
         return bookRepo.findAll();

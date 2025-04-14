@@ -21,14 +21,9 @@ document.getElementById("login-form").addEventListener("submit", async function 
 
     if (response.ok) {
         const data = await response.json();
-        console.log(response.headers.get("userId"));
         localStorage.setItem("userId",response.headers.get('userId'));
-        console.log("localstorage   "   +  localStorage.getItem('userId'));
-        messageElement.textContent = "login successful! " + JSON.stringify(data.orders,null,2);
-        messageElement.style.color = "green";
+        localStorage.setItem("username",response.headers.get('username'));
         window.location.href = "userDashBoard.html";
-
-        
     }
      else {
         const errorText = await response.text();

@@ -24,7 +24,7 @@ document.getElementById("update-form").addEventListener("submit", async function
         messageElement.style.color = "green";
         // Optionally redirect:
         // window.location.href = "login.html";
-        window.location.replace("login.html");
+        window.location.replace("userDashBoard.html");
 
     }
      else {

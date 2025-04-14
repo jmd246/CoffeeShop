@@ -52,7 +52,7 @@ h2{
     font-weight: bold;
 }
 .item{
-    padding: 50px;
+    padding: 3%;
     flex: 1; /* This makes all items grow equally to fill the container */
     flex-wrap: wrap;
     flex-direction: column;

@@ -24,10 +24,13 @@ document.getElementById("books").addEventListener("click", async function (e) {
             const description = document.createElement('div');
             const itemName =  document.createElement('p');
             const itemPrice =  document.createElement('p');
+            const author = document.createElement('p');
             itemName.innerHTML = "Name: " + element.name;
             itemPrice.innerHTML = "Price: " + element.price;
+            author.innerHTML = "Author: " + element.author;
             description.appendChild(itemName);
             description.appendChild(itemPrice);
+            description.appendChild(author);
             // Quantity input
         const quantityLabel = document.createElement('label');
         quantityLabel.innerText = "Quantity: ";
@@ -102,11 +105,14 @@ document.getElementById("coffee").addEventListener("click", async function (e) {
             const item = document.createElement('li');
             const description = document.createElement('div');
             const itemName =  document.createElement('p');
+            const cold = document.createElement('p');
             const itemPrice =  document.createElement('p');
             itemName.innerHTML = "Name: " + element.name;
             itemPrice.innerHTML = "Price: " + element.price;
+            cold.innerHTML = element.cold ? "iced" : "hot";
             description.appendChild(itemName);
             description.appendChild(itemPrice);
+            description.appendChild(cold);
             // Quantity input
         const quantityLabel = document.createElement('label');
         quantityLabel.innerText = "Quantity: ";
