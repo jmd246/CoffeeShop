@@ -46,15 +46,15 @@ public class BookController {
         return ResponseEntity.ok(book.get());
     }
     @PostMapping("/add")
-    public ResponseEntity<Book> addBook(@RequestBody Book book){
+    public ResponseEntity<Book> addBook(@RequestBody BookDTO book){
         return ResponseEntity.status(201).body(service.addBook(book));
     }
     @PostMapping("/addlist")
-    public ResponseEntity<List<Book>> addBooks(@RequestBody List<Book> books){
+    public ResponseEntity<List<Book>> addBooks(@RequestBody List<BookDTO> books){
         return ResponseEntity.status(201).body(service.addBooks(books));
     }
     @PatchMapping("/update/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable long  id,@RequestBody BookDTO updatedBook){
+    public ResponseEntity<Book> updateBook(@PathVariable long  id, @RequestBody BookDTO updatedBook){
        return service.findById(id).map(book->{
             book.setAvailable(updatedBook.isAvailable());
             if(updatedBook.getAuthor().length()>4){
@@ -63,10 +63,10 @@ public class BookController {
             if(updatedBook.getIsbn().length()>5){
                 book.setIsbn(updatedBook.getIsbn());
             }
-            if(updatedBook.getTitle().length()>4){
-                book.setName(updatedBook.getTitle());
+            if(updatedBook.getName().length()>4){
+                book.setName(updatedBook.getName());
             }
-            return ResponseEntity.ok(service.addBook(book));
+            return ResponseEntity.ok(service.addBook(updatedBook));
         }).orElseThrow(()->new ResourceNotFoundException("Cant find book with id " + id ));
     }
     @DeleteMapping("/delete/{id}")

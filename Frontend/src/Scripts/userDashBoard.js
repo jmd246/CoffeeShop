@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function (e) {
     e.preventDefault();
+
     document.getElementById('greetings').innerText = "Welcome Back " + localStorage.getItem('username');
 
     const updateAccountTextLine = document.createElement('a');
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async function (e) {
     const userId = localStorage.getItem('userId');
     const tableContainer = document.createElement("div");
     tableContainer.id = 'table-container';
+    createLogoutButton(tableContainer);
     tableContainer.appendChild(updateAccountTextLine);
 
     if (!userId) {
@@ -224,3 +226,18 @@ document.addEventListener("DOMContentLoaded", async function (e) {
     tableContainer.appendChild(table);
     body.appendChild(tableContainer);
 });
+
+function createLogoutButton(parent){
+    const logout = document.createElement("button");
+    logout.id =  "logoutButton";
+    logout.innerText = "Logout";
+    parent.appendChild(logout);
+    logout.addEventListener("click" ,async function(e) {
+        e.preventDefault();
+        const userId = localStorage.getItem('userId');
+        console.log(localStorage.getItem('userId'));
+        alert("logging out " + userId);
+        localStorage.removeItem('userId');
+        window.location.replace("login.html");
+    })
+}

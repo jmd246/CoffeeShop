@@ -11,6 +11,8 @@ public abstract class Product implements  Purchaseable{
     private long id;
     
     private double price;
+    private String imgSrc;
+   
     private String name;
     private boolean isAvailable;
 
@@ -19,10 +21,17 @@ public abstract class Product implements  Purchaseable{
     
     public Product() {
     }
-    public Product(String name, double price, boolean isAvailable) {
+    public Product(String name, String imgSrc,double price, boolean isAvailable) {
         this.price = price;
         this.name = name;
         this.isAvailable = isAvailable;
+        this.imgSrc = imgSrc;
+    }
+    public String getImgSrc() {
+        return imgSrc;
+    }
+    public void setImgSrc(String imgSrc) {
+        this.imgSrc = imgSrc;
     }
     public double getPrice() {
         return price;

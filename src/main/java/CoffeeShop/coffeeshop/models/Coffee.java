@@ -24,8 +24,8 @@ public class Coffee extends Product {
     }
     public Coffee() {
     }
-    public Coffee(String name, double price,boolean isAvailable,boolean isCold) {
-        super(name,price, isAvailable);
+    public Coffee(String name,String imgSrc, double price,boolean isAvailable,boolean isCold) {
+        super(name,imgSrc,price, isAvailable);
         this.isCold = isCold;
     }
   

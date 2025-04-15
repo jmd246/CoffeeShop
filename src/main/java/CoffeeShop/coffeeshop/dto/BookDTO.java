@@ -1,41 +1,16 @@
 package CoffeeShop.coffeeshop.dto;
 
-public class BookDTO{
-  private String title,author,isbn;
-  private boolean available;
-  private double price;
+public class BookDTO extends ProductDTO{
+  private String author,isbn;
 
 
-
-
-
-public BookDTO(String title, String author, String isbn,boolean available, double price) {
-    this.title = title;
+public BookDTO(String title, String author, String imgSrc,String isbn,boolean available, double price) {
+    super(title,imgSrc ,price,available);
     this.author = author;                          
     this.isbn = isbn;
-    this.available = available;
-    this.price = price;
-}
-public double getPrice() {
-    return price;
-}
-  public void setPrice(double price) {
-    this.price = price;
-  }
-public boolean isAvailable() {
-    return available;
 }
 
-public void setAvailable(boolean available) {
-    this.available = available;
-}
-public String getTitle() {
-    return title;
-}
 
-public void setTitle(String title) {
-    this.title = title;
-}
 
 public String getAuthor() {
     return author;

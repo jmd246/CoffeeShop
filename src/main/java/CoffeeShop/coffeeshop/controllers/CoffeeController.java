@@ -55,28 +55,16 @@ public class CoffeeController {
     // add coffees
     @PostMapping("/add")
     public ResponseEntity<Coffee> addCoffee(@RequestBody CoffeeDTO coffee){
-        Coffee newCoffee =  new Coffee(
-            coffee.getName(),
-            coffee.getPrice(),
-            coffee.isAvailable(),
-            coffee.isCold()
-        );
-        return ResponseEntity.status(201).body(service.addCoffee(newCoffee));
+        return ResponseEntity.status(201).body(service.addCoffee(coffee));
     }
     @PostMapping("/addlist")
-    public ResponseEntity<List<Coffee>> addCoffees(@RequestBody List<Coffee> coffees){
+    public ResponseEntity<List<Coffee>> addCoffees(@RequestBody List<CoffeeDTO> coffees){
         return ResponseEntity.status(201).body(service.addCoffees(coffees));
     }
     //update
     @PatchMapping("/update/{id}")
     public ResponseEntity<Coffee> updateCoffee(@RequestBody CoffeeDTO coffee, @PathVariable long id){
-        Coffee coffeeUpdate = new Coffee(
-            coffee.getName(),
-            coffee.getPrice(),
-            coffee.isAvailable(),
-            coffee.isCold()
-        );
-        return ResponseEntity.ok(service.updateCoffee(id,coffeeUpdate));
+        return ResponseEntity.ok(service.updateCoffee(id,coffee));
     }
     //delete
     @DeleteMapping("delete/{id}")

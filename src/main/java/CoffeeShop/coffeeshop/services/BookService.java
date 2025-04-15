@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import CoffeeShop.coffeeshop.dto.BookDTO;
 import CoffeeShop.coffeeshop.exceptions.DuplicateNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidPriceException;
@@ -24,7 +25,7 @@ public class BookService {
         this.inventoryRepo = inventoryRepo;
     }
 
-    public Book addBook(Book book){
+    public Book addBook(BookDTO book){
         if(book.getAuthor()==null || book.getIsbn() == null || book.getName() == null){
             throw new InvalidNameException("invalid book entry");
         }
@@ -43,13 +44,19 @@ public class BookService {
         if(bookRepo.findByName(book.getName()).isPresent()){
            throw new DuplicateNameException("Coffee present with same name");
         }
-        Book persistedBook = bookRepo.save(book);
+        Book persistedBook = bookRepo.save(
+            new Book(book.getName(),
+            book.getImgSrc(),
+            book.getAuthor(),
+            book.getIsbn(),
+            book.getPrice(),
+            book.isAvailable()));
         inventoryRepo.save(new Inventory(persistedBook,10));
         return persistedBook;
     }
-    public List<Book> addBooks(List<Book> books){
+    public List<Book> addBooks(List<BookDTO> books){
         List<Book> persistedBooks = new ArrayList<>();
-        for(Book book : books){
+        for(BookDTO book : books){
             persistedBooks.add(addBook(book));
         }
         return persistedBooks;

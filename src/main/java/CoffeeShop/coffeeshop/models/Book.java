@@ -13,8 +13,8 @@ public class Book  extends  Product{
     
  
     public Book(){}
-    public Book(String name, String author, String isbn,double price ,boolean available) {
-        super(name,price,available);
+    public Book(String name, String imgSrc,String author, String isbn,double price ,boolean available) {
+        super(name,imgSrc,price,available);
         this.author = author;
         this.isbn = isbn;
     }

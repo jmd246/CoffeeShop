@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import CoffeeShop.coffeeshop.dto.CoffeeDTO;
 import CoffeeShop.coffeeshop.exceptions.DuplicateNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidNameException;
 import CoffeeShop.coffeeshop.exceptions.InvalidPriceException;
@@ -41,7 +42,7 @@ public class CoffeeService {
         if(coffee.isPresent())return coffee.get();
         throw new ResourceNotFoundException("nothing to show here");
     }
-    public Coffee addCoffee(Coffee coffee){
+    public Coffee addCoffee(CoffeeDTO coffee){
         if(coffee.getName().length()< 4 || coffee.getName().length() > 25){
            throw new InvalidNameException("invalid name " + coffee.getName());
         }
@@ -52,18 +53,20 @@ public class CoffeeService {
         if(existingCoffee.isPresent()){
            throw new DuplicateNameException("Coffee present with same name");
         }
-        Coffee persistedCoffee = repo.save(coffee);
+        Coffee persistedCoffee = repo.save(new Coffee(
+            coffee.getName(),coffee.getImgSrc(),coffee.getPrice(),coffee.isAvailable(),coffee.isCold()
+        ));
         inventoryRepo.save(new Inventory(persistedCoffee,10));
         return persistedCoffee;
     }
-    public List<Coffee> addCoffees(List<Coffee> coffees){
+    public List<Coffee> addCoffees(List<CoffeeDTO> coffees){
         List<Coffee> persistedCoffees = new ArrayList<>();
-        for(Coffee coffee : coffees){
+        for(CoffeeDTO coffee : coffees){
             persistedCoffees.add(addCoffee(coffee));
         }
         return persistedCoffees;
     }
-    public Coffee updateCoffee(Long id, Coffee coffeeUpdate){
+    public Coffee updateCoffee(Long id, CoffeeDTO coffeeUpdate){
        Optional<Coffee> coffee = repo.findById(id);
        if(coffee.isPresent()){
           coffee.get().setName(coffeeUpdate.getName());

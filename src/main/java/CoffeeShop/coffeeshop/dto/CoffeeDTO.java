@@ -1,39 +1,19 @@
 package CoffeeShop.coffeeshop.dto;
 
-public class CoffeeDTO {
-   private boolean isCold,isAvailable;
+public class CoffeeDTO extends ProductDTO{
+   private boolean isCold;
    
-    private String name;
-    private double price;
-    public CoffeeDTO(boolean isCold, boolean  isAvailable,String name, double price) {
+  
+    public CoffeeDTO(boolean isCold, boolean  isAvailable,String name, String imgSrc,double price) {
+        super(name,imgSrc ,price, isAvailable);
         this.isCold = isCold;
-        this.name = name;
-        this.price = price;
-        this.isAvailable = isAvailable;
     }
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-    public void setAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
+
     public boolean isCold() {
         return isCold;
     }
     public void setCold(boolean cold) {
         this.isCold = cold;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public double getPrice() {
-        return price;
-    }
-    public void setPrice(double price) {
-        this.price = price;
     }
     
 }
