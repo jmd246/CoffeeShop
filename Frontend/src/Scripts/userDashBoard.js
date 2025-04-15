@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", async function (e) {
 
             const orderIdCell = document.createElement('td');
             orderIdCell.textContent = index === 0 ? order.orderId : '';
+            //orderIdCell.textContent = order.orderId;
             row.appendChild(orderIdCell);
 
             const statusCell = document.createElement('td');
@@ -108,9 +109,13 @@ document.addEventListener("DOMContentLoaded", async function (e) {
             subtotalCell.textContent = (orderItem.product.price * orderItem.quantity).toFixed(2);
             row.appendChild(subtotalCell);
 
-            const updateButtonCell = document.createElement('td');
+            const actionButtonCell = document.createElement('td');
             const updateButton = document.createElement('button');
             updateButton.textContent = 'Update';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            
 
             updateButton.addEventListener('click', async () => {
                 const newQuantity = parseInt(quantityInput.value);
@@ -123,6 +128,7 @@ document.addEventListener("DOMContentLoaded", async function (e) {
                     return;
                 }
 
+                //calculate the change in quantity since its +-
                 const quantityChange = newQuantity - originalQuantity;
 
                 if (quantityChange === 0) {
@@ -147,11 +153,13 @@ document.addEventListener("DOMContentLoaded", async function (e) {
 
                     if (patchResponse.ok) {
                         const updatedOrder = await patchResponse.json();
-                        const updatedItem = updatedOrder.orderItems.find(item => item.product.id == productId);
+                        console.log(updatedOrder.orderItems);
+                        //find the updateditem in orderitems
 
+                        const updatedItem = updatedOrder.orderItems.find(item => item.product.id == productId);
+                    //update subtotal
                         const newSubtotal = updatedItem.product.price * newQuantity;
                         subtotalCell.textContent = newSubtotal.toFixed(2);
-
                         order.totalRef.innerHTML = "Total: " + updatedOrder.total.toFixed(2);
 
                         quantityInput.dataset.originalQuantity = newQuantity;
@@ -163,9 +171,47 @@ document.addEventListener("DOMContentLoaded", async function (e) {
                     alert("An error occurred while updating.");
                 }
             });
+            deleteButton.addEventListener('click', async () => {
+                const orderId = quantityInput.dataset.orderId;
+                const productId = quantityInput.dataset.productId;
+                try {
+                    const deleteResponse = await fetch("http://localhost:8080/order/delete", {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            orderId,
+                            productId
+                        })
+                    });
 
-            updateButtonCell.appendChild(updateButton);
-            row.appendChild(updateButtonCell);
+                    if (deleteResponse.ok) {
+                        const responseText = await deleteResponse.text();
+                        if(!responseText || responseText === null){
+                            alert("Order was deleted");
+                            row.remove();
+                            order.totalRef.remove();
+                        }
+                        else{
+                            const deleteOrder =  JSON.parse(responseText);
+                            console.log(deleteOrder);
+                            order.totalRef.innerHTML = "Total: " + deleteOrder.total.toFixed(2);
+                            row.remove();
+                       }
+                    }
+                } catch (error) {
+                    console.error("Error deleting row:", error);
+                    alert("An error occurred while deleting.");
+                }
+
+
+            });
+
+            actionButtonCell.appendChild(updateButton);
+            row.appendChild(actionButtonCell);
+            actionButtonCell.appendChild(deleteButton);
+            //row.appendChild(deleteButtonCell);
 
             tbody.appendChild(row);
         });

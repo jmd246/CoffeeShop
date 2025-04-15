@@ -111,5 +111,35 @@ public class OrderService {
     
         throw new ResourceNotFoundException("Can't find user or product, or inventory would go negative");
     }
+
+    public Order deleteOrderItem(long orderId,long itemId){
+        Optional<Order> order = orderRepo.findById(orderId);
+        if(order.isPresent()){
+            OrderItem item = null;
+            Order existingOrder = order.get();
+            int quantity = 0;
+            for(OrderItem potentialItem : existingOrder.getOrderItems()){
+                if(potentialItem.getProduct().getId() == itemId){
+                    item = potentialItem;
+                    quantity = item.getQuantity();
+                }
+            }
+           if(item == null) throw new ResourceNotFoundException("failed to find item");
+           if(existingOrder.getOrderItems().remove(item)){
+               Inventory record = inventoryRepo.findByProductId(itemId);
+               record.setQuantity(record.getQuantity() + quantity);
+               inventoryRepo.save(record);
+               if(!existingOrder.getOrderItems().isEmpty()){
+                  return orderRepo.save(existingOrder);
+               }
+               orderRepo.delete(existingOrder);
+               return null;
+           }
+           else{
+               throw new ResourceNotFoundException("cant find order or order item");
+           }
+        }
+        throw new ResourceNotFoundException("cant find order or order item");
+    }
     
 }
